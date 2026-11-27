@@ -1,0 +1,73 @@
+% Report-ready section for the NP-completeness component.
+\section{Cloud Workload Consolidation and Bin Packing}
+\label{sec:binpacking}
+
+\subsection{Problem abstraction}
+Model each workload as an item with positive size $a_i$ and each identical
+server as a bin of capacity $B$. The objective is to assign every item to
+a bin without exceeding capacity and to minimize the number of bins used.
+The decision version asks whether all items can be packed into at most $k$
+bins. This is a simplified one-dimensional consolidation model; it does
+not capture multi-dimensional resources, placement constraints, or runtime
+migration costs.
+
+\subsection{Membership in NP}
+A certificate specifies the bin assigned to each item. In polynomial time,
+a verifier checks that no item is assigned outside the proposed bins and
+that the sum of item sizes in each bin does not exceed $B$. Therefore,
+the decision version of Bin Packing is in NP.
+
+\subsection{NP-hardness reduction from 3-Partition}
+The complexity classification and reduction framework
+follow the standard theory of NP-completeness
+\cite{gareyjohnson}.
+We reduce from 3-Partition, a strongly NP-complete problem. An instance
+contains $3m$ positive integers $a_1,\ldots,a_{3m}$ and a positive
+integer $B$ satisfying $\sum_i a_i=mB$ and
+$B/4<a_i<B/2$ for every item. The question is whether the integers can
+be partitioned into $m$ triples, each summing to $B$.
+
+Construct a Bin Packing decision instance using the same $3m$ item sizes,
+bin capacity $B$, and target number of bins $k=m$. This construction is
+polynomial in the input size.
+
+\paragraph{Forward direction.}
+If the 3-Partition instance has a partition into $m$ triples each summing
+to $B$, place each triple in one bin. Every bin has capacity $B$ and
+exactly $m$ bins are used. Thus the constructed Bin Packing instance is
+a yes-instance.
+
+\paragraph{Reverse direction.}
+Suppose the constructed Bin Packing instance can pack the items into at
+most $m$ bins. The total item size is $mB$, while each bin has capacity
+$B$. Consequently, all $m$ bins must be used and each must be filled to
+capacity $B$. Since every item is strictly larger than $B/4$ and
+strictly smaller than $B/2$, no bin can contain four or more items and
+no bin can contain two or fewer items while being full. Each bin must
+therefore contain exactly three items summing to $B$. These triples form
+a valid solution to the 3-Partition instance.
+
+\paragraph{Conclusion.}
+The reduction preserves yes- and no-instances, so Bin Packing decision is
+NP-hard. Combined with membership in NP, it is NP-complete. Because the
+reduction is from strongly NP-complete 3-Partition, Bin Packing is also
+strongly NP-hard in its optimization form.
+
+\subsection{Greedy heuristic: First Fit Decreasing}
+First Fit Decreasing is a classical bin-packing heuristic
+studied in the literature on approximation algorithms
+\cite{johnson1974}.
+The implemented heuristic sorts items in nonincreasing order and places
+each item into the earliest opened bin with sufficient remaining capacity.
+If no opened bin fits, it opens a new bin. A segment tree stores the
+maximum remaining capacity in each subtree and finds the leftmost bin
+whose remaining capacity is at least the current item's size; the tree is
+updated after each placement. The leftmost-fit query preserves First Fit
+behavior while accelerating the search.
+
+\subsection{Running time}
+Sorting takes $O(n\log n)$. Each item requires a segment-tree query and
+update, each taking $O(\log n)$, so placement takes $O(n\log n)$ total.
+The overall running time is $O(n\log n)$ and the storage is $O(n)$.
+First Fit Decreasing is a heuristic and does not guarantee an optimal
+packing on every instance.
