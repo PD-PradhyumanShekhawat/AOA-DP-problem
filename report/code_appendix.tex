@@ -1,0 +1,20 @@
+\section{Runtime-Validation Code}\label{app:benchmark-code}
+
+This appendix includes the C++ benchmark driver used to obtain the runtime measurements reported in Section~IV. The driver creates the benchmark inputs, performs seven timed repetitions for each size, computes the median, and writes the CSV files used for the result tables. Graph and item generation are excluded from the timed intervals. For maximum flow, construction of the Dinic network and insertion of all edges also occur before the timer; only the call to \texttt{max\_flow} is timed. For Bin Packing, the timer surrounds the complete \texttt{first\_fit\_decreasing} call, including sorting and placement.
+
+\subsection{C++ Benchmark Driver}
+The source is included directly from the project repository to avoid maintaining a duplicated code listing:
+\lstinputlisting[language=C++,caption={C++ benchmark driver used to collect runtime measurements},label={lst:benchmark-driver}]{../src/benchmark.cpp}
+
+\subsection{Reproduction Procedure}
+From the project root, configure and build the Release target, execute the benchmark, and regenerate the figures using the plotting script:
+\begin{lstlisting}[language=bash,caption={Reproducing the benchmark data and figures}]
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+cd build
+./benchmark
+cd ..
+gnuplot scripts/plot_benchmarks.gp
+\end{lstlisting}
+
+The benchmark writes \texttt{flow\_benchmark.csv} and \texttt{binpack\_benchmark.csv}. The graph generator and workload generator, input sizes, fixed seeds, repetition count, timing boundaries, and median calculation are visible in the included source code. The reported runtime values are machine-dependent.
