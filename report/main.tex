@@ -1,0 +1,127 @@
+
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{listings}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    captionpos=b,
+    columns=fullflexible
+}
+
+\title{Algorithmic Applications of Network Flow and NP-Hard Optimization}
+
+\author{
+\IEEEauthorblockN{Pradhyuman Singh Shekahwat}
+\IEEEauthorblockA{COT5405 -- Project 2}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This project examines two real-world optimization problems through
+algorithmic techniques. The first models water distribution as a
+maximum-flow problem. The second models cloud workload consolidation
+as a Bin Packing problem, establishing its computational hardness and
+evaluating a greedy heuristic experimentally.
+\end{abstract}
+
+\section{Introduction}
+
+This paper investigates two optimization problems and their
+algorithmic formulations. The first problem is water distribution
+through a capacitated network, formulated as a maximum-flow problem.
+The second is cloud workload consolidation, formulated as a Bin
+Packing problem.
+
+Water distribution infrastructure must transport available
+water through networks whose transmission capacities
+constrain the amount that can reach downstream consumers.
+Capacity-constrained allocation provides a useful abstraction
+for studying how available supply can be distributed through
+a network \cite{epa_distribution}. In this project, the hydraulic system is simplified
+to a capacitated directed graph, allowing the allocation
+objective to be studied using maximum-flow techniques.
+
+Cloud computing infrastructure must allocate workloads
+to physical or virtualized resources while respecting
+resource limits. Consolidating workloads can reduce the
+number of servers required in a simplified allocation
+setting \cite{kubernetes_resources}. This project models each workload as a one-dimensional
+item and each server as a fixed-capacity bin, isolating the
+computational challenge of resource consolidation from
+additional scheduling constraints.
+
+\input{problem1_water_flow_proof}
+
+\input{problem2_binpacking_proof}
+
+\input{experimental_evaluation}
+
+\section{Conclusion}
+
+This project investigated two computational optimization problems
+through established algorithmic frameworks. Water distribution
+was modeled as a maximum-flow problem by introducing a
+super-source and super-sink, allowing supply constraints, pipe
+capacities, and demand limits to be represented within a single
+flow network. Dinic's algorithm is used to compute the maximum flow
+in the constructed network \cite{clrs}. The construction and correctness argument
+establish that the resulting maximum-flow value corresponds
+to the optimal water allocation under the assumptions of the
+model.
+
+Cloud workload consolidation was formulated as Bin Packing.
+The decision problem was shown to be NP-complete through a
+reduction from 3-Partition, while the optimization problem is
+strongly NP-hard. To obtain practical solutions, First Fit
+Decreasing was implemented with a segment tree to accelerate
+the identification of the earliest feasible bin. This
+implementation achieves an overall running time of
+$O(n\log n)$ and auxiliary storage of $O(n)$.
+
+The experimental results demonstrate the practical behavior
+of both implementations on the tested input families.
+The measured execution times increased with input size,
+while the Bin Packing implementation remained efficient
+across the benchmark sizes evaluated. These observations
+provide empirical insight into implementation performance,
+but do not replace theoretical complexity analysis.
+
+Both models simplify their respective real-world systems.
+The water-distribution model does not capture hydraulic
+dynamics or pressure effects, while the Bin Packing model
+does not account for multidimensional resource requirements
+or operational constraints of real cloud infrastructure.
+Nevertheless, these formulations demonstrate how
+algorithmic modeling, reduction techniques, and efficient
+implementation can be applied to meaningful optimization
+problems.
+
+\input{llm_appendix}
+\input{code_appendix}
+
+\input{llm_appendix}
+
+\input{llm_appendix}
+\input{code_appendix}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
