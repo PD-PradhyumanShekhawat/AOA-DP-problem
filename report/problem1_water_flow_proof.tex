@@ -1,0 +1,62 @@
+% Report-ready section for the Network Flow component.
+\section{Water Distribution as a Maximum-Flow Problem}
+\label{sec:water-flow}
+
+\subsection{Problem abstraction}
+Let the physical water-distribution system be a directed graph
+$G=(V,E)$, where each pipe $(u,v)\in E$ has a nonnegative capacity
+$c(u,v)$. Let $P\subseteq V$ be supply nodes, with available supply
+$s(p)\ge 0$, and let $D\subseteq V$ be demand nodes, with demand cap
+$d(z)\ge 0$. The goal is to maximize the total water delivered to demand
+nodes while respecting pipe capacities, supply limits, and demand limits.
+This abstraction models capacity-constrained allocation; it does not model
+hydraulic pressure, head loss, pipe dynamics, or water quality.
+
+\subsection{Reduction construction}
+Construct a flow network $G'=(V',E')$ by introducing a super-source $S$
+and a super-sink $T$. Set $V'=V\cup\{S,T\}$. Retain every physical
+pipe $(u,v)\in E$ with capacity $c(u,v)$. For each supply node $p\in P$,
+add an edge $(S,p)$ with capacity $s(p)$. For each demand node $z\in D$,
+add an edge $(z,T)$ with capacity $d(z)$. Run a maximum-flow algorithm
+from $S$ to $T$ in $G'$.
+
+\subsection{Correctness proof}
+We show that feasible allocations in the original abstraction correspond
+to feasible flows in $G'$ and that the objective value is preserved.
+
+\paragraph{From a water allocation to a flow.}
+Consider any feasible allocation of water through the physical network.
+Assign the amount dispatched from each supply node $p$ to edge $(S,p)$.
+For every physical pipe $(u,v)$, assign the amount of water sent through
+that pipe to its corresponding edge in $G'$. Finally, assign the amount
+received at demand node $z$ to edge $(z,T)$. Supply limits, pipe capacities,
+and demand caps ensure that all edge-capacity constraints are satisfied.
+At every intermediate node, conservation of water is exactly the flow
+conservation constraint. Thus this assignment is a feasible $S$--$T$ flow.
+Its value equals the total water delivered to the demand nodes.
+
+\paragraph{From a flow to a water allocation.}
+Conversely, take any feasible $S$--$T$ flow in $G'$. Interpret the flow
+on each physical-pipe edge as the amount transported through that pipe,
+the flow on $(S,p)$ as the amount drawn from supply node $p$, and the
+flow on $(z,T)$ as the amount delivered to demand node $z$. Capacity
+constraints enforce each pipe capacity, supply limit, and demand cap.
+Flow conservation at intermediate vertices ensures that transported water
+is balanced. The resulting allocation is therefore feasible in the original
+abstraction, and its total delivered amount equals the flow value.
+
+\paragraph{Optimality.}
+The two mappings above preserve feasibility and objective value. Hence the
+maximum possible water delivery in the abstraction is equal to the maximum
+$S$--$T$ flow value in $G'$. A maximum-flow algorithm therefore produces
+an optimal allocation for this model.
+
+\subsection{Construction and algorithm complexity}
+The transformation adds two vertices and at most $|P|+|D|$ edges beyond
+the physical network. Its construction takes
+$O(|V|+|E|+|P|+|D|)$ time under an adjacency-list representation.
+The implementation then computes a maximum flow using Dinic's algorithm.
+For a general directed network, Dinic's algorithm has the standard
+$O(|V'|^2|E'|)$ worst-case bound. Since $|V'|=|V|+2$ and
+$|E'|=|E|+|P|+|D|$, this is
+$O((|V|+2)^2(|E|+|P|+|D|))$ for the constructed network.
