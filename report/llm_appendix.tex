@@ -1,0 +1,37 @@
+\appendices
+\section{LLM-Assisted Work and Disclosure}
+
+\subsection{Tool Identification}
+The project used ChatGPT (OpenAI), identified in the contemporaneous project log as GPT-6. Assistance covered project planning, formulation of the two application problems, reduction and proof drafting, C++ implementation and debugging, test design, benchmark design and interpretation, and LaTeX report preparation. The students remained responsible for reviewing and validating the submitted work.
+
+\subsection{Prompt and Interaction Records}
+The project source package contains two chronological records: \texttt{PROMPTS\_LOG.md}, which records user prompts, and \texttt{AI\_usage\_log.md}, which records relevant tool outputs, implementation work, external sources, and verification notes. The available records reproduce exact wording where it was retained. They explicitly identify earlier prompts whose exact wording was unavailable; such wording has not been reconstructed.
+
+The following exact prompt, recorded in the AI-use log, initiated implementation:
+\begin{quote}
+\texttt{Yeah. that sounds like a great plan. Let's proceed with and start the project and start implementing}
+\end{quote}
+
+The following exact prompt established the continuing prompt-log requirement:
+\begin{quote}
+\texttt{What I want from you is to keep a log of the prompts that I have used to work on this project. Keep it stored, you can store it in a text file or some sort of file as we work through this project. Store every prompt that I gve you}
+\end{quote}
+
+The chronological prompt ledger records the assignment clarification, the email to the teaching assistant, the assistant's recorded TA clarification, project kickoff, and the prompt-logging instruction. A later addendum records prompts available from the report-completion stage. The prompt ledger is not represented as a complete export of every conversation unless the full conversation export is separately attached.
+
+\subsection{Relevant Intermediate Results}
+The recorded design process selected (i) water distribution with supply and demand limits, modeled using a super-source and super-sink in a capacitated directed network, and (ii) cloud workload consolidation modeled as one-dimensional Bin Packing. The corresponding algorithm choices were Dinic's maximum-flow algorithm and First Fit Decreasing with a max segment tree for locating the earliest bin with sufficient remaining capacity.
+
+The retained implementation-stage output records generation of the C++ headers, command-line driver, deterministic tests, randomized comparison tests, and benchmark harness. It also records an initial CMake build and test run in the development environment. The final benchmark records contain seven timing repetitions per input size and report the median. Machine-specific measurements reported in the main paper were collected separately on the student's Apple M1 Pro machine using Apple Clang 21.0.0 and a CMake Release build.
+
+\subsection{Verification and Responsibility}
+The project was compiled and tested by the authors. The recorded tests include comparisons of Dinic against an Edmonds--Karp reference on randomized small graphs and comparisons of the segment-tree FFD implementation against a scan-based FFD reference. Benchmark measurements were collected from the submitted implementation. These checks provide implementation evidence but do not replace the mathematical proofs. The authors are responsible for the correctness of all claims, proofs, code, experimental results, and citations.
+
+\subsection{Retained Prompt and AI-Use Logs}
+The prompt ledger and AI-use log are included verbatim below as retained project records. They include exact prompts and relevant intermediate outputs where available and explicitly note archival gaps.
+
+\lstinputlisting[caption={Chronological project prompt ledger},label={lst:prompt-ledger}]{../PROMPTS_LOG.md}
+\lstinputlisting[caption={AI assistance and verification log},label={lst:ai-use-log}]{../AI_usage_log.md}
+
+\subsection{Completeness Note}
+The retained prompt ledger states that the exact wording of the original kickoff was not available in the archived conversation and therefore was not reconstructed. The AI-use log also states that its initial entry is not a substitute for full transcripts if the course requires complete transcripts. Any separately exported conversation transcripts should be included with the submission if the instructor interprets the requirement as demanding every prompt and every complete model output. No missing historical prompt or output is fabricated in this appendix.
